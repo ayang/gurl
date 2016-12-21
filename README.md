@@ -9,3 +9,6 @@ a commandline tool like curl but very simple
     echo hello | gurl post http://httpbin.org/post
     gurl post http://httpbin.org/post id=123 "name=jack bower"
     gurl -header a:b,c:d -basic admin:pass put http://httpbin.org/put id=123
+
+## Install:
+    go get github.com/ayang/gurl
