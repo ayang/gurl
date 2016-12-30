@@ -37,14 +37,19 @@ func main() {
 		fmt.Printf("gurl version %s\n", appVersion)
 		os.Exit(0)
 	}
-	if len(args) < 2 {
+	if len(args) < 1 {
 		printUsage()
 	}
 
-	method := args[0]
-	urlArg := args[1]
+	method := strings.ToUpper(args[0])
+	if !stringInSlice(method, []string{"GET", "POST", "HEAD", "PUT", "DELETE", "OPTION"}) {
+		method = "GET"
+	} else {
+		args = args[1:]
+	}
+	urlArg := args[0]
 	params := url.Values{}
-	for _, s := range args[2:] {
+	for _, s := range args[1:] {
 		if index := strings.Index(s, "="); index > 0 {
 			key, value := s[:index], s[index+1:]
 			params.Add(key, value)
@@ -54,10 +59,6 @@ func main() {
 }
 
 func processRequest(method, url string, params url.Values) {
-	method = strings.ToUpper(method)
-	if !stringInSlice(method, []string{"GET", "POST", "HEAD", "PUT", "DELETE", "OPTION"}) {
-		printUsage()
-	}
 	if !strings.HasPrefix(url, "http://") && !strings.HasPrefix(url, "https://") {
 		url = "http://" + url
 	}
